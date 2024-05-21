@@ -1,4 +1,5 @@
 use rand::Rng;
+use std::cmp::Ordering;
 use std::io; // Rng is a "trait", defining the functionality of a type
 
 fn main() {
@@ -29,6 +30,15 @@ fn main() {
         .expect("Failed to read line");
 
     println!("You guessed: {guess}");
+
+    // v| `Ordering` is an enum with variants Less, Greater, Equal
+    // v| `cmp` is method that can be called on anything that can be compared
+    //  - in this case, it is being called on the variable `guess`
+    match guess.cmp(&secret_number) {
+        Ordering::Less => println!("Too small!"),
+        Ordering::Greater => println!("Too big!"),
+        Ordering::Equal => println!("You win!"),
+    }
 }
 
 // /* NOTES: */
