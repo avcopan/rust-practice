@@ -1,7 +1,15 @@
-use std::io;
+use rand::Rng;
+use std::io; // Rng is a "trait", defining the functionality of a type
 
 fn main() {
     println!("I have a number in mind. Can you guess it?");
+
+    // rand::thread_rng returns a random number generator on the current thread
+    // gen_range generates random numbers in the range start..=100 (inclusive!!)
+    let secret_number = rand::thread_rng().gen_range(1..=100);
+
+    println!("The secret number is: {secret_number}");
+
     println!("Please enter your guess:");
 
     let mut guess = String::new();
