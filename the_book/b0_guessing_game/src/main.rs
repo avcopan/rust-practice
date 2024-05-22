@@ -33,8 +33,16 @@ fn main() {
         // v| "shadowing" allows us to reuse the `guess` variable name while converting its type
         // v| the parse method parses the string into another type -- in this case,
         // the requested guess type
-        //  - since it can fail, it returns antoher `Result` enum which we handle with an `.expect()`
-        let guess: u32 = guess.trim().parse().expect("Please type a number!");
+        // v| since the parsing can fail, it returns another `Result` enum
+        //  - instead of doing a .expect() and failing, here we handle the error
+        //  ang allow the program to continue when the guess fails
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) => num,
+            Err(_) => {
+                println!("Please guess a number!");
+                continue;
+            },
+        };
 
         println!("You guessed: {guess}");
 
