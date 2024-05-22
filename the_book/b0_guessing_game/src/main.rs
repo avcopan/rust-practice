@@ -29,11 +29,19 @@ fn main() {
         //  - If the result is Err, expect() crashes the program with the error message we specify
         .expect("Failed to read line");
 
+    // v| "shadowing" allows us to reuse the `guess` variable name while converting its type
+    // v| the parse method parses the string into another type -- in this case,
+    // the requested guess type
+    //  - since it can fail, it returns antoher `Result` enum which we handle with an `.expect()`
+    let guess: u32 = guess.trim().parse().expect("Please type a number!");
+
     println!("You guessed: {guess}");
 
-    // v| `Ordering` is an enum with variants Less, Greater, Equal
     // v| `cmp` is method that can be called on anything that can be compared
     //  - in this case, it is being called on the variable `guess`
+    //  - it returns an `Ordering` enum with variants `Less`, `Greater`, `Equal`
+    // v| the `match` expression allows us to decide how to proceed based on the
+    // return value
     match guess.cmp(&secret_number) {
         Ordering::Less => println!("Too small!"),
         Ordering::Greater => println!("Too big!"),
