@@ -37,9 +37,66 @@ fn main() {
             break counter;
         }
     }; // note: we need a semicolon to end the statement
+    println!("The result is {result}");
 
     // loop labels (very cool!!)
-    // (left off here)
+    //  - allow you to apply `break` and `continue` statements to an outer loop
+    let mut count = 0;
+    'outer: loop {
+        println!("count = {count}");
 
-    println!("The result is {result}");
+        let mut remaining = 10;
+
+        'inner: loop {
+            // label not needed for inner loop
+            println!("remaining = {remaining}");
+            if remaining == 9 {
+                break 'inner; // same as `break;`
+            }
+
+            if count == 2 {
+                break 'outer;
+            }
+
+            remaining -= 1;
+        }
+
+        count += 1;
+    }
+    println!("End count = {count}");
+
+    // while loop
+    //  - a.
+    let mut number = 3;
+
+    while number != 0 {
+        println!("{number}");
+        number -= 1;
+    }
+    println!("Blastoff!!");
+
+    //  - b.
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    while index < 5 {
+        println!("Item {index} is {}", a[index]);
+
+        index += 1;
+    }
+    println!("Final index value is {index}");
+
+    // for loop
+    //  - a.
+    let a = [10, 20, 30, 40, 50];
+
+    for item in a {
+        println!("Next item is {item}")
+    }
+
+    //  - b.
+    for number in (1..4).rev() {
+        println!("{number}")
+    }
+    println!("Blastoff!!");
 }
