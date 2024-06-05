@@ -19,4 +19,17 @@ fn main() {
     let mut s = String::from("hello");
     s.push_str(", world!"); // appends a literal to the `String`
     println!("{}", s);
+
+    // Memory and Allocation
+    //  - as an immutable value, a string literal is known at compile time and
+    //  hardcoded directly into the executable
+    //  - a `String`, on the other hand, must implement a mutable, growable
+    //  piece of text, whose size is unknown at compile time
+    //      - it therefore requires allocation of appropriate amounts of memory
+    //      on the heap *at runtime*
+    //      => this means we need a way of returning the memory to the allocator
+    //      when we're done using it!
+    //  - different ways of freeing memory:
+    //      1. garbage collector - keeps track and frees unused memory
+    //      2. explicit freeing - manually free the memory in the code
 }
