@@ -32,4 +32,57 @@ fn main() {
     //  - different ways of freeing memory:
     //      1. garbage collector - keeps track and frees unused memory
     //      2. explicit freeing - manually free the memory in the code
+    //      3. a different path...
+    //  - Rust frees memory automatically once the variable that *owns* it goes
+    //  out of scope
+    {
+        let mut s = String::from("hi again");
+        // String::from allocates memory on the heap to store the value
+        // the variable `s` "owns" the allocated memory
+        s.push_str(", you.");
+        println!("{}", s);
+    } // as the variable `s` goes out of scope, the memory is freed
+
+    // Variables and Data Interacting with Move
+    //  - with stack variables, the following code sets both `x` and `y` to the
+    //  value `5` -- `y` *copies* the value of `x`, and each is pushed onto the
+    //  stack as a separate variable
+    let x = 5;
+    let y = x;
+    println!("x = {x}");
+    println!("y = {y}");
+    //  - with heap variables, `s1` stores a *pointer* and `s2` copies the
+    //  *pointer value*, so that they now both point to the same allocated
+    //  memory on the heap
+    //  - to ensure memory safety, after the line `let s2 = s1`, Rust considers
+    //  `s1` as **no longer valid** -- the ownership **moves** from `s1` to `s2`
+    let s1 = String::from("hello");
+    let s2 = s1; // `s1` is **moved** to `s2`
+    // println!("s1 = {s1}");  // compiler error: borrow of a moved value: `s1`
+    println!("s2 = {s2}");
+    //  - now `s1` is invalid and `s2` owns the memory
+    //  - when `s2` goes out of scope, the allocated memory on the heap is freed
+
+    // Variables and Data Interacting with Clone
+    //  - if we want to copy, we can explicitly clone the variable to allocate a
+    //  new, independent block of memory on the heap storing the same value
+    let t1 = String::from("HELLO");
+    let t2 = t1.clone();
+    //  - clone acts as a visual indicator that something is going on, and the
+    //  operation might be expensive
+    //  - if you don't need to call clone, you can rest assured that the
+    //  operation should be inexpensive
+    println!("t1 = {t1}");
+    println!("t2 = {t2}");
+
+    // Note: Stack variables *are* automatically copied, because they have a
+    // known size at compile time and the copy operation is trivial
+    //  - when implementing our own types, any type that has a known size at
+    //  compile time can be given the `Copy` trait to be automatically copied
+    //  - Stack / automatically copying types:
+    //      1. Booleans and numbers (bool, u32, i32, f64)
+    //      2. Characters (char)
+    //      3. Tuples containing only the above types, e.g. ((char, char, bool))
+    //  - If a Tuple contains any non-stack type, it must be stored on the heap
+    //  and allocated (?)
 }
