@@ -85,4 +85,50 @@ fn main() {
     //      3. Tuples containing only the above types, e.g. ((char, char, bool))
     //  - If a Tuple contains any non-stack type, it must be stored on the heap
     //  and allocated (?)
+
+    // Ownership and Functions
+    //  - passing *into* a function:
+    //      - for heap variables, the value *moves* into the function when it is
+    //      called and is no longer valid in the calling scope
+    //      - for stack variables, the value is copied and can still be called
+    let s = String::from("hello again");
+    takes_ownership(s);
+    // println!("{}", s);  // `s` has moved, so it is no longer valid here
+
+    //  - returning *from* a function:
+    //      - for heap variables, the value moves out of the function and
+    //      becomes valid in the calling scope
+    //      - for stack variables, the value gets copied
+    let s = gives_ownership();
+    println!("{}", s);
+
+    //  - passing into and returning from a function:
+    //      - the value of heap variables can preserved in scope by returning
+    //      them back from the function
+    let s_in = String::from("try this one!");
+    let s_out = takes_and_gives_back(s_in);
+    println!("{}", s_out);
+    //      - we can return them as tuples
+    let (s_out, len) = calculate_length(s_out);
+    println!("'{}' has length {}", s_out, len);
+    //      - but the better way is to pass by reference...
+}
+
+fn takes_ownership(some_string: String) {
+    println!("{}", some_string);
+}
+
+fn gives_ownership() -> String {
+    let some_string = String::from("here you go!");
+    some_string
+}
+
+fn takes_and_gives_back(a_string: String) -> String {
+    println!("{}", a_string);
+    a_string
+}
+
+fn calculate_length(s: String) -> (String, usize) {
+    let length = s.len();
+    (s, length)
 }
