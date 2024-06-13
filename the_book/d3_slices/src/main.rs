@@ -26,10 +26,27 @@ fn main() {
     //  binary; this is also why they are immutable!
     let s = "Hello, world!";
     println!("{}", s);
+
+    // String Slices as Parameters
+    let s = "The quick brown fox jumps over the lazy dog.";
+    println!("{}", first_word(s));
+    //  ^ string slices are literals already, so no need for a `&`
+    println!("{}", first_word(&s[4..]));
+    println!("{}", first_word(&s[10..12]));
+    println!("{}", first_word(&s[35..]));
+
+    // Array Slices
+    let a = [1, 2, 3, 4, 5];
+    let slice = &a[1..3];
+    assert_eq!(slice, &[2, 3]);
+    println!("{:?}", slice);
 }
 
 // &str is the "string slice" type
-fn first_word(s: &String) -> &str {
+// fn first_word(s: &String) -> &str {
+//  - by changing the argument to `&str` as well, we allow the function to
+//  handle *either* slices or whole string references
+fn first_word(s: &str) -> &str {
     let b = s.as_bytes();
 
     for (index, &bchar) in b.iter().enumerate() {
