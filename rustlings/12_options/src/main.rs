@@ -8,20 +8,25 @@ fn maybe_ice_cream(hour_of_day: u16) -> Option<u16> {
     }
 }
 
+#[derive(Debug)]
+struct Point {
+    x: i32,
+    y: i32,
+}
 
 fn main() {
-    // Left off learning while-let (see TODO below)
-    // let mut optional = Some(0);
+    let optional_point = Some(Point { x: 100, y: 200 });
 
-    // loop {
-    //     match optional {
-    //         Some(i) => {
-    //             if i > 9 {
-    //                 println!("Greater than 9, quit!")
-    //             }
-    //         }
-    //     }
-    // }
+    // In pattern matching, the `ref` keyword creates a reference to a value
+    // within the pattern, instead of moving it or copying the value.
+    // Without this, the value would move to `p` and the `println` line below
+    // would raise a compiler error.
+    match optional_point {
+        Some(ref p) => println!("Coordinates are {},{}", p.x, p.y),
+        _ => panic!("No match!"),
+    }
+
+    println!("{optional_point:?}"); // Don't change this line.
 }
 
 #[cfg(test)]
@@ -31,8 +36,6 @@ mod tests {
     // Exercise 1
     #[test]
     fn raw_value() {
-        // TODO: Fix this test. How do you get the value contained in the
-        // Option?
         let ice_creams = maybe_ice_cream(12).unwrap();
 
         assert_eq!(ice_creams, 5); // Don't change this line.
@@ -61,25 +64,29 @@ mod tests {
     }
 
     // TODO: Finish this!
-    // #[test]
-    // fn layered_option() {
-    //     let range = 10;
-    //     let mut optional_integers: Vec<Option<i8>> = vec![None];
+    #[test]
+    fn layered_option() {
+        let range = 10;
+        let mut optional_integers: Vec<Option<i8>> = vec![None];
 
-    //     for i in 1..=range {
-    //         optional_integers.push(Some(i));
-    //     }
+        for i in 1..=range {
+            optional_integers.push(Some(i));
+        }
 
-    //     let mut cursor = range;
+        let mut cursor = range;
 
-    //     // TODO: Make this a while-let statement. Remember that `Vec::pop()`
-    //     // adds another layer of `Option`. You can do nested pattern matching
-    //     // in if-let and while-let statements.
-    //     integer = optional_integers.pop() {
-    //         assert_eq!(integer, cursor);
-    //         cursor -= 1;
-    //     }
+        // Syntax:
+        //     while let PATTERN = EXPRESSION {
+        //         // Code to execute if the pattern matches
+        //     }
+        // It loops until the expression no longer matches the pattern.
+        // In the following case, the pattern is a nested `Some(Some(i))`.
+        while let Some(Some(integer)) = optional_integers.pop() {
+            println!("integer = {:?}", integer);
+            assert_eq!(integer, cursor);
+            cursor -= 1;
+        }
 
-    //     assert_eq!(cursor, 0);
-    // }
+        assert_eq!(cursor, 0);
+    }
 }
